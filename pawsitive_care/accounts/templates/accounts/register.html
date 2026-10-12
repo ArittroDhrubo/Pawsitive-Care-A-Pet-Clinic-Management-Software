@@ -1,0 +1,190 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Register - Pawsitive Care{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-10 col-xl-8">
+    <div class="card glass card-success auth-card">
+      <div class="card-header soft-accent-bg text-center">
+        <div class="d-flex flex-column align-items-center">
+          <i class="fas fa-user-plus fa-2x themed-icon mb-2" aria-hidden="true"></i>
+          <h3 class="m-0">Join Pawsitive Care</h3>
+          <p class="text-muted mb-0">Create your account to get started</p>
+        </div>
+      </div>
+
+      <div class="card-body p-3 p-lg-4">
+                  <!-- Account Type Note -->
+                  <div class="mb-3">
+                    <div class="alert alert-info m-0">
+                      <i class="fas fa-info-circle me-1" aria-hidden="true"></i>
+                      <strong>Account Type:</strong> Your account will be created as a <strong>Client</strong>.
+                      Contact an administrator if you need different access permissions.
+                    </div>
+                  </div>
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <!-- Name -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                <i class="fas fa-user me-1" aria-hidden="true"></i> First Name
+              </label>
+              {{ form.first_name.as_widget }}
+              {% if form.first_name.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.first_name.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                <i class="fas fa-user me-1" aria-hidden="true"></i> Last Name
+              </label>
+              {{ form.last_name.as_widget }}
+              {% if form.last_name.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.last_name.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Username / Email -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.username.id_for_label }}" class="form-label">
+                <i class="fas fa-at me-1" aria-hidden="true"></i> Username
+              </label>
+              {{ form.username.as_widget }}
+              {% if form.username.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.username.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.email.id_for_label }}" class="form-label">
+                <i class="fas fa-envelope me-1" aria-hidden="true"></i> Email
+              </label>
+              {{ form.email.as_widget }}
+              {% if form.email.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.email.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.phone.id_for_label }}" class="form-label">
+                <i class="fas fa-phone me-1" aria-hidden="true"></i> Phone Number
+              </label>
+              {{ form.phone.as_widget }}
+              {% if form.phone.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.phone.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="mb-3">
+            <label for="{{ form.address.id_for_label }}" class="form-label">
+              <i class="fas fa-map-marker-alt me-1" aria-hidden="true"></i> Address
+            </label>
+            {{ form.address.as_widget }}
+            {% if form.address.errors %}
+            <div class="text-danger small mt-1">
+              {{ form.address.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+
+
+
+          <!-- Passwords -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.password1.id_for_label }}" class="form-label">
+                <i class="fas fa-lock me-1" aria-hidden="true"></i> Password
+              </label>
+              {{ form.password1.as_widget }}
+              {% if form.password1.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.password1.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.password2.id_for_label }}" class="form-label">
+                <i class="fas fa-lock me-1" aria-hidden="true"></i> Confirm Password
+              </label>
+              {{ form.password2.as_widget }}
+              {% if form.password2.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.password2.errors.0 }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+            {{ error }}{% endfor %}
+          </div>
+          {% endif %}
+
+          <button type="submit" class="btn btn-accent w-100 mb-2">
+            <i class="fas fa-user-plus me-2" aria-hidden="true"></i>
+            Create Account
+          </button>
+
+          <div class="text-center">
+            <small class="text-muted">
+              Already have an account?
+              <a href="{% url 'accounts:login' %}" class="text-decoration-none">Sign in here</a>
+            </small>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+  // Ensure Night Sands form styling applies even if Django widgets lack classes
+  (function() {
+    const formRoot = document.currentScript.closest('.card');
+    if (!formRoot) return;
+
+    formRoot.querySelectorAll('input, select, textarea').forEach(el => {
+      // Add form-control if missing
+      if (!el.classList.contains('form-control') && !el.classList.contains('form-select')) {
+        if (el.tagName === 'SELECT') el.classList.add('form-select');
+        else el.classList.add('form-control');
+      }
+      // Autocomplete helpers
+      if (el.name === 'username') el.setAttribute('autocomplete', 'username');
+      if (el.name === 'email') el.setAttribute('autocomplete', 'email');
+      if (el.name === 'first_name') el.setAttribute('autocomplete', 'given-name');
+      if (el.name === 'last_name') el.setAttribute('autocomplete', 'family-name');
+      if (el.name === 'phone') el.setAttribute('autocomplete', 'tel');
+      if (el.name === 'address') el.setAttribute('autocomplete', 'street-address');
+      if (el.name === 'password1') el.setAttribute('autocomplete', 'new-password');
+      if (el.name === 'password2') el.setAttribute('autocomplete', 'new-password');
+    });
+  })();
+</script>
+{% endblock %}
+{% endblock %}

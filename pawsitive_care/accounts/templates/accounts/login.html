@@ -1,0 +1,150 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Login - Pawsitive Care{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7 col-lg-5">
+
+    <!-- Login -->
+    <div class="card glass card-teal login-card">
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+          <div class="hero-logo-mini"><i class="fas fa-paw"></i></div>
+          <h3 class="mt-3 mb-1">Welcome Back</h3>
+          <p class="text-muted m-0">Sign in to your Pawsitive Care account</p>
+        </div>
+
+        {% include "pets/includes/messages.html" %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <!-- Username -->
+          <div class="mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label">
+              Username
+            </label>
+            <div class="input-group input-icon">
+              <span class="input-group-text"><i class="fas fa-user"></i></span>
+              {{ form.username.as_widget }}
+            </div>
+            {% if form.username.errors %}
+              <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="{{ form.password.id_for_label }}" class="form-label">
+              Password
+            </label>
+            <div class="input-group input-icon">
+              <span class="input-group-text"><i class="fas fa-lock"></i></span>
+              {{ form.password.as_widget }}
+              <button class="btn btn-ghost btn-sm toggle-pass" type="button" aria-label="Show password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            {% if form.password.errors %}
+              <div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          {% if form.non_field_errors %}
+          <div class="alert alert-error mt-2">{{ form.non_field_errors.0 }}</div>
+          {% endif %}
+
+          <button type="submit" class="btn btn-primary w-100 mb-2">
+            <i class="fas fa-sign-in-alt me-1"></i> Sign In
+          </button>
+
+          <div class="d-flex justify-content-between small">
+            <a href="{% url 'accounts:register' %}" class="text-decoration-none">Create account</a>
+            <a href="#" class="text-decoration-none">Forgot password?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Demo accounts -->
+    <div class="card glass card-olive mt-4">
+      <div class="card-header soft-accent-bg">
+        <h6 class="m-0"><i class="fas fa-info-circle me-2"></i> Demo Accounts</h6>
+      </div>
+      <div class="card-body small">
+        <div class="row gy-2">
+          <div class="col-6"><strong>Admin:</strong> <span class="text-muted">admin / admin123</span></div>
+          <div class="col-6"><strong>Veterinarian:</strong> <span class="text-muted">vet / vet123</span></div>
+          <div class="col-6"><strong>Staff:</strong> <span class="text-muted">staff / staff123</span></div>
+          <div class="col-6"><strong>Client:</strong> <span class="text-muted">client / client123</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+  // Apply theme classes + accessibility to Django widgets
+  (function () {
+    document.querySelectorAll('form input').forEach(function (el) {
+      el.classList.add('form-control');
+      if (el.name === 'username') {
+        el.setAttribute('autocomplete','username');
+        if (!el.placeholder) el.placeholder = 'your.username';
+      }
+      if (el.name === 'password') {
+        el.setAttribute('autocomplete','current-password');
+        if (!el.placeholder) el.placeholder = '••••••••';
+      }
+    });
+
+    // Show/Hide password
+    var toggle = document.querySelector('.toggle-pass');
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        const input = toggle.parentElement.querySelector('input');
+        const icon = toggle.querySelector('i');
+        const isText = input.type === 'text';
+        input.type = isText ? 'password' : 'text';
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+        toggle.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
+      });
+    }
+  })();
+</script>
+{% endblock %}
+
+<style>
+/* Mini paw badge (matches Night Sands aesthetic) */
+.hero-logo-mini{
+  width:64px;height:64px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;border:2px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+.hero-logo-mini i{ font-size:1.6rem; color: var(--sand-dark); }
+
+/* Input groups that blend with your theme */
+.input-group-text{
+  background: var(--surface-card);
+  border: 2px solid var(--border-light);
+  border-right: 0;
+}
+.input-group .form-control{
+  border: 2px solid var(--border-light);
+  border-left: 0;
+}
+.toggle-pass{
+  border-left: 0;
+  border: 2px solid var(--border-light);
+  background: var(--surface-card);
+}
+
+/* Card cleanup */
+.login-card .card-body{ padding: 2rem; }
+</style>
+{% endblock %}
